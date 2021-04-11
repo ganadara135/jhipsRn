@@ -1,0 +1,40 @@
+/**
+ * this is for React-native application config
+ */
+application {
+  config {    
+    applicationType monolith,    
+    authenticationType jwt,
+    prodDatabaseType mysql,
+  }
+  entities *
+}
+
+entity Album {
+  title String required,
+  description TextBlob,
+  created Instant
+}
+
+entity Photo {
+  title String required,
+  description TextBlob,
+  image ImageBlob required,
+  taken Instant
+}
+
+entity Tag {
+  name String required minlength(2)
+}
+
+relationship ManyToOne {
+  Album{user(login)} to User,
+  Photo{album(title)} to Album
+}
+
+relationship ManyToMany {
+  Photo{tag(name)} to Tag{photo}
+}
+
+paginate Album with pagination
+paginate Photo, Tag with infinite-scroll

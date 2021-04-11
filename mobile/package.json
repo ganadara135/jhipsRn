@@ -17,8 +17,9 @@
     "postinstall": "patch-package",
     "prettier": "prettier --write \"{,.,**/,.jhipster/**/}*.{md,json,yml,js,ts,tsx}\"",
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start2": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start",
+    "android": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start --android",
+    "ios": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },

@@ -41,6 +41,8 @@
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "languages": ["ko", "en"],
-    "otherModules": []
+    "otherModules": [],
+    "entities": ["Album", "Photo", "Tag"],
+    "lastLiquibaseTimestamp": 1618134044000
   }
 }
