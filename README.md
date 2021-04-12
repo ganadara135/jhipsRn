@@ -4,9 +4,20 @@
 
 # How to operate this
 
-- db and redis up on docker
+- wsl port forwarding
+- db and redis up on docker by 'npm run docker:db:up' and 'npm run docker:redis:up'
 - backend up by 'npm run backend:start' and 'npm start'
 - go to mobile directory and start react native app
+
+# main issue
+
+1. expo devtool 접근문제
+
+- 문제 : expo devtool 접근이 안됨 (19002 포트)
+- 해결: 2가지로 접근
+  a. expo devtools 의 접근 IP 주소를 모두로 변경 (0.0.0.0) ( EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0)
+  b. websocket 접근 불가 문제는 브라우저 창에 호스트IP 를 직접 넣어서 접근함 ( 192.168.0.36:19002 )
+  link : https://blog.naver.com/kjamjalee/222307200425
 
 # org
 
