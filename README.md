@@ -1,3 +1,13 @@
+# fixed Thing
+
+- fix Cors problems, add http://localhost:19006 at cors configuration on backend.
+
+# How to operate this
+
+- db and redis up on docker
+- backend up by 'npm run backend:start' and 'npm start'
+- go to mobile directory and start react native app
+
 # org
 
 This application was generated using JHipster 7.0.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.0.1](https://www.jhipster.tech/documentation-archive/v7.0.1).
