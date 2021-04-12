@@ -43,6 +43,7 @@ export function* loginLoad(api) {
   const authToken = yield select(selectAuthToken);
 
   console.log("authToken : ", authToken)
+  console.log("api.setAuthToken : ", api.setAuthToken)
   // only set the token if we have it
   if (authToken) {
     yield call(api.setAuthToken, authToken);

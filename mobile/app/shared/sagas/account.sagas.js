@@ -7,6 +7,7 @@ import { callApi } from './call-api.saga';
 export function* getAccount(api) {
   const response = yield call(api.getAccount);
 
+  console.log('response : ', response);
   // success?
   if (response.ok && response.headers['content-type']?.indexOf('json') !== -1) {
     console.log('Account - OK');
