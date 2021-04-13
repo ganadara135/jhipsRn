@@ -31,6 +31,7 @@ export const App = (props: IAppProps) => {
   }, []);
 
   const paddingTop = '60px';
+
   return (
     <Router basename={baseHref}>
       <div className="app-container" style={{ paddingTop }}>
@@ -53,6 +54,10 @@ export const App = (props: IAppProps) => {
             </ErrorBoundary>
           </Card>
           <Footer />
+          <div>
+            {'baseHref :  '}
+            {baseHref}
+          </div>
         </div>
       </div>
     </Router>

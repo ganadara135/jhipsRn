@@ -42,6 +42,10 @@ module.exports = options =>
       ],
     },
     devServer: {
+      overlay: true,
+      transportMode: 'ws',
+      injectClient: false,
+
       stats: options.stats,
       hot: true,
       contentBase: './target/classes/static/',
