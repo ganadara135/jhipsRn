@@ -6,4 +6,9 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
   ...ApplicationStyles.entity,
   ...ApplicationStyles.entityDeleteModal,
+  
+  imageBlob: {
+    width: 100,
+    height: 100,
+  },
 });

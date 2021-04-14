@@ -53,9 +53,9 @@ function PhotoDetailScreen(props) {
       {/* Image Field */}
       <Text style={styles.label}>Image :</Text>
       <Text testID="imageContentType">{photo.imageContentType}</Text>
-      {/* <Image testID="image" style={styles.imageBlob} source={{ uri: `data:${photo.imageContentType};base64,${photo.image}` }}/> */}
-      <Image testID="image" style={{height: 100, width: 50}} source={{ uri: `data:${photo.imageContentType};base64,${photo.image}` }}/>
-      <p>3333 msssss</p>
+      <Image testID="image" style={styles.imageBlob} source={{ uri: `data:${photo.imageContentType};base64,${photo.image}` }}/>
+      {/* <Image testID="image" style={{height: '10%', width: '10%'}} source={{ uri: `data:${photo.imageContentType};base64,${photo.image}` }}/> */}
+      
       {/* <img src={`data:${photoEntity.imageContentType};base64,${photoEntity.image}`} style={{ maxHeight: '30px' }} /> */}
       {/* Taken Field */}
       <Text style={styles.label}>Taken:</Text>

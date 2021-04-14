@@ -4,14 +4,14 @@
 2. db and redis up on docker by 'npm run docker:db:up' and 'npm run docker:redis:up'
 3. backend up by 'npm run backend:start' on root authority
 4. 'npm start' for webapps with Browsersync. This is operating on WDS(Webpack Dev Server)
-5. go to mobile directory and start react native app
+5. go to mobile directory and start react native app, 'npm start3'
 
 # Operating Issues
 
 1. expo devtool 접근문제 <br>
    문제 : expo devtool 접근이 안됨 (19002 포트) <br>
-   해결: 2가지로 처리 필요 <br>
-   a. expo devtools 의 접근 IP 주소를 모두로 변경 (0.0.0.0) ( EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0) <br>
+   해결: 2가지 처리 필요 <br>
+   a. expo devtools 의 접근 IP를 모든 IP로 변경 (0.0.0.0) ( EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0) <br>
    b. websocket 접근 불가 문제는 브라우저 창에 호스트IP 를 직접 넣어서 접근함 ( 192.168.0.36:19002 ) <br>
    link : https://blog.naver.com/kjamjalee/222307200425 <br>
 
@@ -21,10 +21,10 @@
    a. 'npm start' or 'npm run webapp:dev' <br>
    b. package.json 에서 script 설정 파일에 web-dev-server 설정 값 참고 <br>
 
-3. Mobile side(react-native) access error
-   문제 : mobile 쪽에서 백엔드 접속 안됨
-   해결 : CORS 정책 문제로, 백엔드쪽에서 설정 변경 필요
-   a. fix Cors problems, add http://localhost:19006 at cors configuration on backend.
+3. Mobile side(react-native) access error <br>
+   문제 : mobile 쪽에서 백엔드 접속 안됨 <br>
+   해결 : CORS 정책 문제로, 백엔드쪽에서 설정 변경 필요 <br>
+   a. fix Cors problems, add http://localhost:19006 at cors configuration on backend. <br>
 
 # org
 
