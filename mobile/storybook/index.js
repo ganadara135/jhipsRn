@@ -8,6 +8,6 @@ configure(() => {
   require('./stories');
 }, module);
 
-const StorybookUIRoot = AppConfig.debugMode ? getStorybookUI({ asyncStorage: AsyncStorage }) : View;
+const StorybookUIRoot = AppConfig.debugMode ? getStorybookUI({ asyncStorage: AsyncStorage, disableWebsockets: true }) : View;
 
 export default StorybookUIRoot;

@@ -121,6 +121,7 @@ function PhotoEditScreen(props) {
               label="Description"
               placeholder="Enter Description"
               testID="descriptionInput"
+              inputType="text"
               onSubmitEditing={() => imageRef.current?.focus()}
             />
             <FormField
@@ -129,6 +130,7 @@ function PhotoEditScreen(props) {
               label="Image"
               placeholder="Enter Image"
               testID="imageInput"
+              inputType="image"
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
             />
             <FormField
