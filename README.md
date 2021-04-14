@@ -1,14 +1,10 @@
-# fixed Thing
-
-- fix Cors problems, add http://localhost:19006 at cors configuration on backend.
-
 # How to operate this
 
-- wsl port forwarding
-- db and redis up on docker by 'npm run docker:db:up' and 'npm run docker:redis:up'
-- backend up by 'npm run backend:start' on root authority
-- 'npm start' for webapps with Browsersync. This is operating on WDS(Webpack Dev Server)
-- go to mobile directory and start react native app
+1. wsl port forwarding
+2. db and redis up on docker by 'npm run docker:db:up' and 'npm run docker:redis:up'
+3. backend up by 'npm run backend:start' on root authority
+4. 'npm start' for webapps with Browsersync. This is operating on WDS(Webpack Dev Server)
+5. go to mobile directory and start react native app
 
 # Operating Issues
 
@@ -24,6 +20,11 @@
    해결 : Webpack Dev Server 위에서 Webapps 이 작동되게 변경 <br>
    a. 'npm start' or 'npm run webapp:dev' <br>
    b. package.json 에서 script 설정 파일에 web-dev-server 설정 값 참고 <br>
+
+3. Mobile side(react-native) access error
+   문제 : mobile 쪽에서 백엔드 접속 안됨
+   해결 : CORS 정책 문제로, 백엔드쪽에서 설정 변경 필요
+   a. fix Cors problems, add http://localhost:19006 at cors configuration on backend.
 
 # org
 
