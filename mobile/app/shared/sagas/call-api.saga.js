@@ -7,7 +7,10 @@ import { navigate } from '../../navigation/nav-ref';
 // if login fails, it will return the error
 export function* callApi(apiCall) {
   const response = yield apiCall;
-  if (!isUnauthorized(response)) {
+
+  console.log("chk callApi response : ", response)
+
+  if (!isUnauthorized(response)) {    
     return response;
   }
   // this triggers your UI to show a login form

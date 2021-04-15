@@ -120,7 +120,7 @@ export default React.forwardRef((props, ref) => {
           value={values[name]}
           
           onChange={(value) => setFieldValue(name, value)}
-          // onBlur={() => setFieldTouched(name)}
+          onBlur={() => setFieldTouched(name)}
           error={hasError}
           {...otherProps}
         />

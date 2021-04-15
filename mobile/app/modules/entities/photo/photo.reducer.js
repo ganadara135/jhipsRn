@@ -64,6 +64,7 @@ export const allRequest = (state) =>
 
 // request to update from an api
 export const updateRequest = (state) =>
+console.log("chk photoUpdateReqeust() ", state) || 
   state.merge({
     updateSuccess: false,
     updating: true,

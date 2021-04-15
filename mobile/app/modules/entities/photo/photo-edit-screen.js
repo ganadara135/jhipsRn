@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View, Platform, Button, Image } from 'react-native';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 
@@ -12,6 +12,11 @@ import FormField from '../../../shared/components/form/jhi-form-field';
 import Form from '../../../shared/components/form/jhi-form';
 import { useDidUpdateEffect } from '../../../shared/util/use-did-update-effect';
 import styles from './photo-styles';
+
+
+import * as ImagePicker from 'expo-image-picker';
+import ParseDataUri from 'parse-data-uri';
+import base64 from 'react-native-base64'
 
 // set up validation schema for the form
 const validationSchema = Yup.object().shape({
@@ -39,6 +44,9 @@ function PhotoEditScreen(props) {
 
   const [formValue, setFormValue] = React.useState();
   const [error, setError] = React.useState('');
+  const [imageChanged, setImage] = React.useState(null);
+  const [imageChangedData, setImageData] = React.useState(null);
+  const [imageChangedMediatype, setImageMediaType] = React.useState(null);
 
   const isNewEntity = !(route.params && route.params.entityId);
 
@@ -56,7 +64,7 @@ function PhotoEditScreen(props) {
     } else if (!fetching) {
       setFormValue(entityToFormValue(photo));
     }
-  }, [photo, fetching, isNewEntity]);
+  }, [photo, fetching, isNewEntity, imageChangedMediatype]);
 
   // fetch related entities
   React.useEffect(() => {
@@ -75,7 +83,51 @@ function PhotoEditScreen(props) {
     }
   }, [updateSuccess, errorUpdating, navigation]);
 
-  const onSubmit = (data) => updatePhoto(formValueToEntity(data));
+
+
+  React.useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }      
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      // aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+    console.log("chk result : ", result.base64);
+    
+    // var test = ParseDataUri(result.uri);
+    // console.log('test : ', test)
+    // console.log('test : ', test.mimeType)
+    // console.log('test 2 : ', base64.encodeFromByteArray(test.data))
+
+    if (!result.cancelled) {        
+      setImage(result.uri);
+      let rawData = ParseDataUri(result.uri);
+
+      console.log('rawdata', rawData)
+      
+      setImageMediaType(rawData.mimeType)
+      setImageData(base64.encodeFromByteArray(rawData.data))
+
+      console.log('imageChangedData', imageChangedData)
+      console.log('imageChangedMediatype', imageChangedMediatype)
+    }
+  };
+
+  const onSubmit = (data, imageChangedData, imageChangedMediatype) => updatePhoto(formValueToEntity(data, imageChangedData, imageChangedMediatype));
+  // const onSubmit = (data) => updatePhoto(formValueToEntity(data));
 
   if (fetching) {
     return (
@@ -104,7 +156,7 @@ function PhotoEditScreen(props) {
         contentContainerStyle={styles.paddedScrollView}>
         {!!error && <Text style={styles.errorText}>{error}</Text>}
         {formValue && (
-          <Form initialValues={formValue} validationSchema={validationSchema} onSubmit={onSubmit} ref={formRef}>
+          <Form initialValues={formValue} validationSchema={validationSchema} onSubmit={()=>onSubmit(formValue,imageChangedData,imageChangedMediatype)} ref={formRef}>
             <FormField
               name="title"
               ref={titleRef}
@@ -127,13 +179,17 @@ function PhotoEditScreen(props) {
             <FormField
               name="image"
               ref={imageRef}
-              label="Image"
-              placeholder="Enter Image"
+              label="Image"              
               testID="imageInput"
-              inputType="image-base64"  
+              inputType="image-base64"
               contentType={photo.imageContentType}
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
             />
+            {/* <Text>여기에 이미지 수정버튼 달기, Expo ImagePicker 바로 넣어 보기</Text> */}
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Button title="Pick an image from camera roll" onPress={pickImage} />
+              {imageChanged && <Image source={{ uri: imageChanged }} style={{ width: 100, height: 100 }}/>}              
+            </View>
             <FormField
               name="imageContentType"
               ref={imageContentTypeRef}
@@ -190,15 +246,23 @@ const entityToFormValue = (value) => {
     tags: value.tags?.map((i) => i.id),
   };
 };
-const formValueToEntity = (value) => {
+const formValueToEntity = (value,imageData,imageMediatype) => {
+  // console.log("chk formValueToEntity() 111 : ", value)
+  // console.log("chk formValueToEntity() 222 : ", imageChanged)
+  console.log(" in formValueToEntity() value.image ", value.image)
+  console.log(" in formValueToEntity() imageData ", imageData)  
+  console.log(" in formValueToEntity() imageMediatype ", imageMediatype)  
   const entity = {
     id: value.id ?? null,
     title: value.title ?? null,
     description: value.description ?? null,
-    image: value.image ?? null,
-    imageContentType: value.imageContentType ?? null,
+    // image: value.image ?? null,
+    image: imageData !== null ? imageData : value.image,
+    // imageContentType: value.imageContentType ?? null,
+    imageContentType: imageMediatype !== null ? imageMediatype : value.imageContentType,
     taken: value.taken ?? null,
   };
+  console.log("entity value : ", entity.image)
   entity.album = value.album ? { id: value.album } : null;
   entity.tags = value.tags.map((id) => ({ id }));
   return entity;

@@ -34,6 +34,7 @@ function* getAllPhotos(api, action) {
 
 function* updatePhoto(api, action) {
   const { photo } = action;
+  console.log("in Saga updatePhoto : ", action)
   // make the call to the api
   const idIsNotNull = !(photo.id === null || photo.id === undefined);
   const apiCall = call(idIsNotNull ? api.updatePhoto : api.createPhoto, photo);
