@@ -55,7 +55,7 @@ export const App = (props: IAppProps) => {
           </Card>
           <Footer />
           <div>
-            {'baseHref :  '}
+            {'baseHref 테스트 메시지 :  '}
             {baseHref}
           </div>
         </div>

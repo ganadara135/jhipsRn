@@ -179,7 +179,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: org@localhost
+    from: k.cod.hack@gmail.com
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*

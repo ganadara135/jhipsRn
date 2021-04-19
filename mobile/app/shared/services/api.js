@@ -70,7 +70,7 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const getAllPhotos = (options) => api.get('api/photos', options);
   const createPhoto = (photo) => api.post('api/photos', photo);
   // dynamic id 예제   api.put('/servers/1', { live: true })
-  const updatePhoto = (photo) => console.log("9999999999999999 : " + photo.id) || api.put('api/photos/' + photo.id, photo);
+  const updatePhoto = (photo) => console.log("check Dynamic id : " + photo.id) || api.put('api/photos/' + photo.id, photo);
   // const updatePhoto = (photo) => api.post('api/photos', photo);
   const deletePhoto = (photoId) => api.delete('api/photos/' + photoId);
 

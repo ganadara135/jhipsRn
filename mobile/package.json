@@ -18,7 +18,7 @@
     "prettier": "prettier --write \"{,.,**/,.jhipster/**/}*.{md,json,yml,js,ts,tsx}\"",
     "start": "expo start",
     "start2": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start",
-    "start3": "EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0 REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start",
+    "start3": "EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0 REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.8 expo start",
     "android": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start --android",
     "ios": "REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.36 expo start --ios",
     "web": "expo start --web",
