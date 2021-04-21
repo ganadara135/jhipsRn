@@ -171,11 +171,13 @@ public class PhotoResource {
     ) {
         log.debug("REST request to get a page of Photos");
         Page<Photo> page;
-        if (eagerload) {
-            page = photoRepository.findAllWithEagerRelationships(pageable);
-        } else {
-            page = photoRepository.findAll(pageable);
-        }
+        // if (eagerload) {
+        //     page = photoRepository.findAllWithEagerRelationships(pageable);
+        // } else {
+        //     page = photoRepository.findAll(pageable);
+        // }
+        page = photoRepository.findAllByIdMy(pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

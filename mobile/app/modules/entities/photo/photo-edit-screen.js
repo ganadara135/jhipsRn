@@ -21,7 +21,7 @@ import base64 from 'react-native-base64'
 // set up validation schema for the form
 const validationSchema = Yup.object().shape({
   title: Yup.string().required(),
-  image: Yup.string().required(),
+  // image: Yup.string().required(),
 });
 
 function PhotoEditScreen(props) {
@@ -44,27 +44,40 @@ function PhotoEditScreen(props) {
 
   const [formValue, setFormValue] = React.useState();
   const [error, setError] = React.useState('');
-  const [imageChanged, setImage] = React.useState(null);
-  const [imageChangedData, setImageData] = React.useState(null);
-  const [imageChangedMediatype, setImageMediaType] = React.useState(null);
+  // const [imageChanged, setImage] = React.useState(null);  
+  // const [imageChangedMediatype, setImageMediaType] = React.useState(null);
 
   const isNewEntity = !(route.params && route.params.entityId);
 
-  React.useEffect(() => {
-    if (!isNewEntity) {
-      getPhoto(route.params.entityId);
-    } else {
-      reset();
-    }
-  }, [isNewEntity, getPhoto, route, reset]);
+  // const [isNew] = useState(!props.match.params || !props.match.params.id);
+  // const { photoEntity, albums, tags, loading, updating } = props;
+  // const { description, image, imageContentType } = photoEntity;
+  const { description, image, imageContentType } = photo;
+  console.log('photo  : ', photo);
+  console.log('isNewEntity : ', isNewEntity);
+  console.log('formValue : ', formValue);
+  console.log('albumList : ', albumList);
+  console.log('tagList : ', tagList);
+  
+
+//  React.useEffect(() => {
+//    if (!isNewEntity) {
+//       getPhoto(route.params.entityId);
+//    } else {
+//       reset();
+//    }
+//  }, [isNewEntity, getPhoto, route, reset]);
 
   React.useEffect(() => {
+    console.log("chk 얼마나 호출되는지")
     if (isNewEntity) {
+      reset();
       setFormValue(entityToFormValue({}));
     } else if (!fetching) {
       setFormValue(entityToFormValue(photo));
     }
-  }, [photo, fetching, isNewEntity, imageChangedMediatype]);
+  }, [fetching]);
+  // }, [photo, fetching, isNewEntity]);
 
   // fetch related entities
   React.useEffect(() => {
@@ -79,10 +92,9 @@ function PhotoEditScreen(props) {
       } else if (updateSuccess) {
         setError('');
         isNewEntity ? navigation.replace('PhotoDetail', { entityId: photo?.id }) : navigation.pop();
-      }
+      }      
     }
   }, [updateSuccess, errorUpdating, navigation]);
-
 
 
   React.useEffect(() => {
@@ -102,32 +114,33 @@ function PhotoEditScreen(props) {
       allowsEditing: false,
       // aspect: [4, 3],
       quality: 1,
-    });
+    });    
 
-    console.log(result);
-    console.log("chk result : ", result.base64);
-    
-    // var test = ParseDataUri(result.uri);
-    // console.log('test : ', test)
-    // console.log('test : ', test.mimeType)
-    // console.log('test 2 : ', base64.encodeFromByteArray(test.data))
-
-    if (!result.cancelled) {        
-      setImage(result.uri);
-      let rawData = ParseDataUri(result.uri);
-
-      console.log('rawdata', rawData)
-      
-      setImageMediaType(rawData.mimeType)
-      setImageData(base64.encodeFromByteArray(rawData.data))
-
-      console.log('imageChangedData', imageChangedData)
-      console.log('imageChangedMediatype', imageChangedMediatype)
+    if (!result.cancelled) {                    
+      let rawData = ParseDataUri(result.uri);      
+      // setImageMediaType(rawData.mimeType)
+      // setImage(base64.encodeFromByteArray(rawData.data))
+      setFormValue(entityToFormValue({
+        image : base64.encodeFromByteArray(rawData.data),
+        imageContentType: rawData.mimeType
+      }));   
     }
   };
 
-  const onSubmit = (data, imageChangedData, imageChangedMediatype) => updatePhoto(formValueToEntity(data, imageChangedData, imageChangedMediatype));
-  // const onSubmit = (data) => updatePhoto(formValueToEntity(data));
+  // const onSubmit = (data, imageChangedData, imageChangedMediatype) => updatePhoto(formValueToEntity(data, imageChangedData, imageChangedMediatype));
+  // const onSubmit = (data) => updatePhoto(formValueToEntity(date));
+  const onSubmit = (data) => updatePhoto(formValueToEntity(
+    entityToFormValue( console.log('data : ', data) ||  console.log('data.tags.map((i) => i) : ', data.tags.map((i) => i)) || {
+      // id: formValue.id ?? null,
+      title: formValue.title ? formValue.title : data.title,
+      description: formValue.description ? formValue.description : data.description,
+      image: formValue.image ? formValue.image : data.image,
+      imageContentType: formValue.imageContentType ? formValue.imageContentType : data.imageContentType,
+      taken: formValue.taken ? formValue.taken : data.taken,
+      album: formValue.album ? formValue.album : (data.album ? data.album : null),
+      tags: (formValue.tags.length > 0) ? formValue.tags.map((i) => i) : ((data.tags.length > 0) ? data.tags.map((i) => i) : null)
+    })));
+
 
   if (fetching) {
     return (
@@ -156,8 +169,9 @@ function PhotoEditScreen(props) {
         contentContainerStyle={styles.paddedScrollView}>
         {!!error && <Text style={styles.errorText}>{error}</Text>}
         {formValue && (
-          <Form initialValues={formValue} validationSchema={validationSchema} onSubmit={()=>onSubmit(formValue,imageChangedData,imageChangedMediatype)} ref={formRef}>
-            <FormField
+          <Form initialValues={formValue} validationSchema={validationSchema}  onSubmit={onSubmit} ref={formRef}>
+          {/* //onSubmit={ () => onSubmit(formValue,imageChangedData,imageChangedMediatype)} ref={formRef}> */}
+            <FormField   
               name="title"
               ref={titleRef}
               label="Title"
@@ -176,7 +190,14 @@ function PhotoEditScreen(props) {
               inputType="text"
               onSubmitEditing={() => imageRef.current?.focus()}
             />
-            <FormField
+            {/* <Text>여기에 이미지 수정버튼 달기, Expo ImagePicker 바로 넣어 보기</Text> */}
+            {!image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Button title="Pick an image from camera roll" onPress={pickImage} />
+              {formValue.image && <Image source={{
+                uri:`data:${formValue.imageContentType};base64,${formValue.image}`}} 
+                style={{ width: 100, height: 100 }}/>}
+            </View>}
+            {image && <FormField
               name="image"
               ref={imageRef}
               label="Image"              
@@ -184,13 +205,8 @@ function PhotoEditScreen(props) {
               inputType="image-base64"
               contentType={photo.imageContentType}
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
-            />
-            {/* <Text>여기에 이미지 수정버튼 달기, Expo ImagePicker 바로 넣어 보기</Text> */}
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Button title="Pick an image from camera roll" onPress={pickImage} />
-              {imageChanged && <Image source={{ uri: imageChanged }} style={{ width: 100, height: 100 }}/>}              
-            </View>
-            <FormField
+            />}            
+            {image && <FormField
               name="imageContentType"
               ref={imageContentTypeRef}
               label="Image Content Type"
@@ -199,7 +215,7 @@ function PhotoEditScreen(props) {
               inputType="text"
               autoCapitalize="none"
               onSubmitEditing={() => takenRef.current?.focus()}
-            />
+            />}
             <FormField name="taken" ref={takenRef} label="Taken" placeholder="Enter Taken" testID="takenInput" inputType="datetime" />
             <FormField
               name="album"
@@ -211,9 +227,11 @@ function PhotoEditScreen(props) {
               placeholder="Select Album"
               testID="albumSelectInput"
             />
+            
+            {/*
             <FormField
               name="tags"
-              inputType="select-multiple"
+              inputType="select-multiple"`
               ref={tagsRef}
               listItems={tagList}
               listItemLabelField="name"
@@ -221,7 +239,8 @@ function PhotoEditScreen(props) {
               placeholder="Select Tag"
               testID="tagSelectInput"
             />
-
+            */}
+        
             <FormButton title={'Save'} testID={'submitButton'} />
           </Form>
         )}
@@ -232,6 +251,7 @@ function PhotoEditScreen(props) {
 
 // convenience methods for customizing the mapping of the entity to/from the form value
 const entityToFormValue = (value) => {
+  console.log("chk entityToFormValue() value : ", value)
   if (!value) {
     return {};
   }
@@ -242,29 +262,23 @@ const entityToFormValue = (value) => {
     image: value.image ?? null,
     imageContentType: value.imageContentType ?? null,
     taken: value.taken ?? null,
-    album: value.album && value.album.id ? value.album.id : null,
-    tags: value.tags?.map((i) => i.id),
+    album: value.album && value.album ? value.album : null,
+    tags: value.tags?.map((i) => i),
   };
 };
-const formValueToEntity = (value,imageData,imageMediatype) => {
-  // console.log("chk formValueToEntity() 111 : ", value)
-  // console.log("chk formValueToEntity() 222 : ", imageChanged)
-  console.log(" in formValueToEntity() value.image ", value.image)
-  console.log(" in formValueToEntity() imageData ", imageData)  
-  console.log(" in formValueToEntity() imageMediatype ", imageMediatype)  
+const formValueToEntity = (value) => {
+  console.log("chk formValueToEntity() : ", value)  
   const entity = {
     id: value.id ?? null,
     title: value.title ?? null,
     description: value.description ?? null,
-    // image: value.image ?? null,
-    image: imageData !== null ? imageData : value.image,
-    // imageContentType: value.imageContentType ?? null,
-    imageContentType: imageMediatype !== null ? imageMediatype : value.imageContentType,
+    image: value.image ?? null,    
+    imageContentType: value.imageContentType ?? null,
     taken: value.taken ?? null,
-  };
-  console.log("entity value : ", entity.image)
+  };  
   entity.album = value.album ? { id: value.album } : null;
   entity.tags = value.tags.map((id) => ({ id }));
+  console.log("chk return entity : ", entity)
   return entity;
 };
 
@@ -288,6 +302,8 @@ const mapDispatchToProps = (dispatch) => {
     getAllPhotos: (options) => dispatch(PhotoActions.photoAllRequest(options)),
     updatePhoto: (photo) => dispatch(PhotoActions.photoUpdateRequest(photo)),
     reset: () => dispatch(PhotoActions.photoReset()),
+    // 테스트 용도로 만들어 놓고 사용 안함
+    setBlob: (imageData, contentType) => dispatch(PhotoActions.setBlob(imageData,contentType))
   };
 };
 

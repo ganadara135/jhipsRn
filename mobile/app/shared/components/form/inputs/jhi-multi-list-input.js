@@ -8,10 +8,12 @@ export default React.forwardRef((props, ref) => {
   const { value, label, labelStyle, error, listItems = [], placeholder, listItemLabelField, testID, ...otherProps } = props;
   const actualPlaceholder = placeholder ? placeholder : 'Select an item...';
 
+  
+
   const memoizedItems = React.useMemo(() => {
     // map the list items to the expected Picker format
     const mapListItems = () => {
-      const children = listItems.map((listItem) => {
+      const children2 = listItems.map((listItem) =>  {
         const itemLabel = listItem[listItemLabelField] || listItem.id || '';
         return { name: `${itemLabel}`, id: listItem.id };
       });
@@ -19,10 +21,12 @@ export default React.forwardRef((props, ref) => {
         {
           name: label,
           id: 0,
-          children,
+          children2,
         },
       ];
     };
+    //console.log('mapListItems : ', mapListItems)
+    
     return mapListItems(listItems);
   }, [label, listItemLabelField, listItems]);
 
@@ -45,7 +49,7 @@ export default React.forwardRef((props, ref) => {
         selectText={actualPlaceholder}
         showDropDowns={true}
         readOnlyHeadings={true}
-        selectedItems={value}
+        selectedItems={listItems}
         subItemsFlatListProps={{ initialNumToRender: 15 }}
         ref={ref}
         styles={pickerStyles}

@@ -63,7 +63,8 @@ const create = (baseURL = AppConfig.apiUrl) => {
   const getAlbum = (albumId) => api.get('api/albums/' + albumId);
   const getAllAlbums = (options) => api.get('api/albums', options);
   const createAlbum = (album) => api.post('api/albums', album);
-  const updateAlbum = (album) => api.put('api/albums', album);
+  // const updateAlbum = (album) => api.put('api/albums', album);
+  const updateAlbum = (album) => api.put('api/albums/' + album.id, album)
   const deleteAlbum = (albumId) => api.delete('api/albums/' + albumId);
 
   const getPhoto = (photoId) => api.get('api/photos/' + photoId);

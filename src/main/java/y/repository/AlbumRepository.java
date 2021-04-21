@@ -18,6 +18,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Album> findByUserIsCurrentUser();
 
     @Query(
+        // value = "select album from Album album"
         value = "select album from Album album where album.user.login = ?#{principal.username}"
         // value = "select album from Album album where album.user.login = 'user'"
         // value = "select id, title from Album album where user_id =:id",

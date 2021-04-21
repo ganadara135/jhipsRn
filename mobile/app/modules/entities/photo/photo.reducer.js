@@ -22,6 +22,7 @@ const { Types, Creators } = createActions({
   photoDeleteFailure: ['error'],
 
   photoReset: [],
+  photoSetBlob: ['imageData','contentType'],
 });
 
 export const PhotoTypes = Types;
@@ -64,7 +65,7 @@ export const allRequest = (state) =>
 
 // request to update from an api
 export const updateRequest = (state) =>
-console.log("chk photoUpdateReqeust() ", state) || 
+console.log("chk updateReqeust() ", state) || 
   state.merge({
     updateSuccess: false,
     updating: true,
@@ -155,6 +156,13 @@ export const deleteFailure = (state, action) => {
 
 export const reset = (state) => INITIAL_STATE;
 
+export const setBlob = (state, action) => {
+  const { imageData, contentType } = action;
+  return state.merge({
+    photo: {image: imageData, imageContentType: contentType}
+  })
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -173,4 +181,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.PHOTO_UPDATE_FAILURE]: updateFailure,
   [Types.PHOTO_DELETE_FAILURE]: deleteFailure,
   [Types.PHOTO_RESET]: reset,
+  [Types.PHOTO_SET_BLOB]: setBlob,
 });

@@ -51,20 +51,19 @@ export default React.forwardRef((props, ref) => {
 
 const pickerStyles = StyleSheet.create({
   inputWeb: {
-    fontSize: 16,
+    fontSize: 15,
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: 'white',
-    height: 40,
-    fontFamily: Fonts.type.base,
+    height: 45,    fontFamily: Fonts.type.base,
     borderColor: '#c0cbd3',
     color: 'black',
   },
   inputIOS: {
-    fontSize: 16,
+    fontSize: 15,
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
@@ -74,7 +73,7 @@ const pickerStyles = StyleSheet.create({
     color: 'black',
   },
   inputAndroid: {
-    fontSize: 16,
+    fontSize: 15,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.5,
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
   },
   label: {
     paddingVertical: 5,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   textError: {
