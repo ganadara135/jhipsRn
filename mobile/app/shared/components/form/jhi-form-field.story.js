@@ -51,6 +51,7 @@ function DemoForm() {
   const listFieldRef = createRef();
   const dateFieldRef = createRef();
   const dateTimeFieldRef = createRef();
+  const tagsRef = createRef();
 
   const initialValues = {
     stringField: '',
@@ -65,7 +66,45 @@ function DemoForm() {
   // Cross-Origin Read Blocking (CORB) happend
   // const image_sample = "https://www.google.co.kr/url?sa=i&url=https%3A%2F%2Flastzone.com%2F452&psig=AOvVaw10MZwM5Md2RPCvtgFqaeSb&ust=1618477704319000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMj-77mx_e8CFQAAAAAdAAAAABAD";
   // this is static position
-  const image_sample = "http://localhost:19006/favicon-16.png";   
+  const image_sample = "http://localhost:19006/favicon-16.png"; 
+  const itemsKcod = [
+    // this is the parent or 'item'
+    {
+      name: 'Fruits',
+      id: 0,
+      // these are the children or 'sub items'
+      children: [
+        {
+          name: 'Apple',
+          id: 10,
+        },
+        {
+          name: 'Strawberry',
+          id: 17,
+        },
+        {
+          name: 'Pineapple',
+          id: 13,
+        },
+        {
+          name: 'Banana',
+          id: 14,
+        },
+        {
+          name: 'Watermelon',
+          id: 15,
+        },
+        {
+          name: 'Kiwi fruit',
+          id: 16,
+        },
+      ],
+    },
+
+  ];
+
+  console.log('itemsKcod : ', itemsKcod[0].children)
+
   return (
     <KeyboardAwareScrollView style={styles.container} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
       <Form initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} ref={formRef}>
@@ -103,6 +142,17 @@ function DemoForm() {
         <FormField inputType="select-one" name="listField" ref={listFieldRef} label="List Field" listItems={sports} />
         <FormField inputType="date" name="dateField" ref={dateFieldRef} label="Date Field" />
         <FormField inputType="datetime" name="dateTimeField" ref={dateTimeFieldRef} label="Date Time Field" />
+        <FormField
+              name="tags"
+              inputType="select-multiple"
+              ref={tagsRef}
+              // listItems={[{}]}
+              listItems={itemsKcod[0].children}
+              listItemLabelField="name"
+              label="Tag"
+              placeholder="Select Tag"
+              testID="tagSelectInput"
+            />
         <FormButton title={'Save'} />
         {data && (
           <View>

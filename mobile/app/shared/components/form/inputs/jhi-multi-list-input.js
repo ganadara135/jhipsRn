@@ -8,31 +8,36 @@ export default React.forwardRef((props, ref) => {
   const { value, label, labelStyle, error, listItems = [], placeholder, listItemLabelField, testID, ...otherProps } = props;
   const actualPlaceholder = placeholder ? placeholder : 'Select an item...';
 
-  
-
   const memoizedItems = React.useMemo(() => {
     // map the list items to the expected Picker format
     const mapListItems = () => {
-      const children2 = listItems.map((listItem) =>  {
+      const children = listItems.map((listItem) => {
         const itemLabel = listItem[listItemLabelField] || listItem.id || '';
+        // console.log('itemLabel : ', itemLabel)
         return { name: `${itemLabel}`, id: listItem.id };
       });
+
+      console.log("chk children : ", children)
+
       return [
-        {
+        {          
           name: label,
           id: 0,
-          children2,
+          children,
         },
       ];
     };
-    //console.log('mapListItems : ', mapListItems)
-    
     return mapListItems(listItems);
   }, [label, listItemLabelField, listItems]);
+
 
   if (!listItems.length) {
     return <Text>Loading...</Text>;
   }
+
+  // console.log("chk props : ", props)
+  console.log("chk memoizedItems : ", memoizedItems)
+  // console.log("chk subKey : ", memoizedItems[0]['children'].length)
 
   return (
     <View style={styles.container}>
@@ -42,14 +47,17 @@ export default React.forwardRef((props, ref) => {
       <SectionedMultiSelect
         IconRenderer={MaterialIcons}
         items={memoizedItems}
+        //items={memoizedItems[0].children}
+        // items={itemsKcod}
         alwaysShowSelectText={true}
         expandDropDowns={true}
         uniqueKey="id"
         subKey="children"
+        displayKey="name"        
         selectText={actualPlaceholder}
         showDropDowns={true}
         readOnlyHeadings={true}
-        selectedItems={listItems}
+        selectedItems={value}
         subItemsFlatListProps={{ initialNumToRender: 15 }}
         ref={ref}
         styles={pickerStyles}

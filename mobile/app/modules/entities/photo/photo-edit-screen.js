@@ -17,6 +17,7 @@ import styles from './photo-styles';
 import * as ImagePicker from 'expo-image-picker';
 import ParseDataUri from 'parse-data-uri';
 import base64 from 'react-native-base64'
+import SeamlessImmutable from 'seamless-immutable';
 
 // set up validation schema for the form
 const validationSchema = Yup.object().shape({
@@ -60,16 +61,16 @@ function PhotoEditScreen(props) {
   console.log('tagList : ', tagList);
   
 
-//  React.useEffect(() => {
-//    if (!isNewEntity) {
-//       getPhoto(route.params.entityId);
-//    } else {
-//       reset();
-//    }
-//  }, [isNewEntity, getPhoto, route, reset]);
+  React.useEffect(() => {
+    if (!isNewEntity) {
+       getPhoto(route.params.entityId);
+    } else {
+       reset();
+    }
+  }, [isNewEntity, getPhoto, route, reset]);
 
   React.useEffect(() => {
-    console.log("chk 얼마나 호출되는지")
+    //console.log("chk 얼마나 호출되는지")
     if (isNewEntity) {
       reset();
       setFormValue(entityToFormValue({}));
@@ -116,7 +117,7 @@ function PhotoEditScreen(props) {
       quality: 1,
     });    
 
-    if (!result.cancelled) {                    
+    if (!result.cancelled) {               
       let rawData = ParseDataUri(result.uri);      
       // setImageMediaType(rawData.mimeType)
       // setImage(base64.encodeFromByteArray(rawData.data))
@@ -130,7 +131,8 @@ function PhotoEditScreen(props) {
   // const onSubmit = (data, imageChangedData, imageChangedMediatype) => updatePhoto(formValueToEntity(data, imageChangedData, imageChangedMediatype));
   // const onSubmit = (data) => updatePhoto(formValueToEntity(date));
   const onSubmit = (data) => updatePhoto(formValueToEntity(
-    entityToFormValue( console.log('data : ', data) ||  console.log('data.tags.map((i) => i) : ', data.tags.map((i) => i)) || {
+    // entityToFormValue( console.log('data : ', data) ||  console.log('data.tags.map((i) => i) : ', data.tags.map((i) => i)) || {
+    entityToFormValue( console.log('data : ', data) || {
       // id: formValue.id ?? null,
       title: formValue.title ? formValue.title : data.title,
       description: formValue.description ? formValue.description : data.description,
@@ -138,7 +140,8 @@ function PhotoEditScreen(props) {
       imageContentType: formValue.imageContentType ? formValue.imageContentType : data.imageContentType,
       taken: formValue.taken ? formValue.taken : data.taken,
       album: formValue.album ? formValue.album : (data.album ? data.album : null),
-      tags: (formValue.tags.length > 0) ? formValue.tags.map((i) => i) : ((data.tags.length > 0) ? data.tags.map((i) => i) : null)
+      tags: (formValue.tags !== undefined && formValue.tags !== null) ? formValue.tags.map((i) => i) : 
+        ((data.tags !== undefined && data.tags !== null) ? data.tags.map((i) => i) : [])
     })));
 
 
@@ -158,6 +161,50 @@ function PhotoEditScreen(props) {
   const takenRef = createRef();
   const albumRef = createRef();
   const tagsRef = createRef();
+/*
+  const itemsKcod = [
+    // this is the parent or 'item'
+    {
+      name: 'Fruits',
+      id: 0,
+      // these are the children or 'sub items'
+      children: [
+        {
+          name: 'Apple',
+          id: 10,
+        },
+        {
+          name: 'Strawberry',
+          id: 17,
+        },
+        {
+          name: 'Pineapple',
+          id: 13,
+        },
+        {
+          name: 'Banana',
+          id: 14,
+        },
+        {
+          name: 'Watermelon',
+          id: 15,
+        },
+        {
+          name: 'Kiwi fruit',
+          id: 16,
+        },
+      ],
+    },
+
+  ];
+
+  console.log('itemsKcod : ', itemsKcod)
+  const tmp = tagList.concat();
+  console.log("tmp : ", tmp)
+  console.log("Array.isArray(tmp) : ", Array.isArray(tmp))
+  var muTmp = SeamlessImmutable.asMutable(tmp);
+  console.log("muTmp : ", muTmp);
+*/
 
   return (
     <View style={styles.container}>
@@ -191,12 +238,12 @@ function PhotoEditScreen(props) {
               onSubmitEditing={() => imageRef.current?.focus()}
             />
             {/* <Text>여기에 이미지 수정버튼 달기, Expo ImagePicker 바로 넣어 보기</Text> */}
-            {!image && <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <Button title="Pick an image from camera roll" onPress={pickImage} />
-              {formValue.image && <Image source={{
+              {!image && <Image source={{
                 uri:`data:${formValue.imageContentType};base64,${formValue.image}`}} 
                 style={{ width: 100, height: 100 }}/>}
-            </View>}
+            </View>
             {image && <FormField
               name="image"
               ref={imageRef}
@@ -205,7 +252,7 @@ function PhotoEditScreen(props) {
               inputType="image-base64"
               contentType={photo.imageContentType}
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
-            />}            
+            />}       
             {image && <FormField
               name="imageContentType"
               ref={imageContentTypeRef}
@@ -227,11 +274,9 @@ function PhotoEditScreen(props) {
               placeholder="Select Album"
               testID="albumSelectInput"
             />
-            
-            {/*
             <FormField
               name="tags"
-              inputType="select-multiple"`
+              inputType="select-multiple"
               ref={tagsRef}
               listItems={tagList}
               listItemLabelField="name"
@@ -239,8 +284,6 @@ function PhotoEditScreen(props) {
               placeholder="Select Tag"
               testID="tagSelectInput"
             />
-            */}
-        
             <FormButton title={'Save'} testID={'submitButton'} />
           </Form>
         )}
@@ -263,11 +306,12 @@ const entityToFormValue = (value) => {
     imageContentType: value.imageContentType ?? null,
     taken: value.taken ?? null,
     album: value.album && value.album ? value.album : null,
-    tags: value.tags?.map((i) => i),
+    // 임시로 간단히 처리하기 위해서 막아 놓음, 이미 값이 들어있는 tags 가 있으면 children  을 못 찾는 버그 발생
+    // tags: value.tags?.map((i) => i) ?? [],
   };
 };
 const formValueToEntity = (value) => {
-  console.log("chk formValueToEntity() : ", value)  
+  console.log("chk formValueToEntity() : ", value)
   const entity = {
     id: value.id ?? null,
     title: value.title ?? null,
@@ -277,7 +321,7 @@ const formValueToEntity = (value) => {
     taken: value.taken ?? null,
   };  
   entity.album = value.album ? { id: value.album } : null;
-  entity.tags = value.tags.map((id) => ({ id }));
+  entity.tags = value.tags !== undefined ? value.tags.map((id) => ({ id })) : [];
   console.log("chk return entity : ", entity)
   return entity;
 };

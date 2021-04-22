@@ -41,7 +41,13 @@ export default React.forwardRef((props, ref) => {
     // number values have to be strings
    // values[name] = String(values[name]);
   }
+  if (inputType === 'select-multiple' ) {
+    // number values have to be strings
+  //  values[name] = String(values[name]);
+    console.log("select-multiple myTags : ", values[name])
+  }
 
+  
   const hasError = errors[name] && touched[name];
   return (
     <React.Fragment>
@@ -91,7 +97,7 @@ export default React.forwardRef((props, ref) => {
           {...otherProps}
         />
       )}
-      {inputType === 'select-multiple' && (
+      {inputType === 'select-multiple' && (        
         <AppMultiListInput
           ref={ref}
           value={values[name]}
@@ -99,7 +105,7 @@ export default React.forwardRef((props, ref) => {
           onBlur={() => setFieldTouched(name)}
           error={hasError}
           {...otherProps}
-        />
+        />        
       )}
       {(inputType === 'date' || inputType === 'datetime') && (
         <AppDateInput
