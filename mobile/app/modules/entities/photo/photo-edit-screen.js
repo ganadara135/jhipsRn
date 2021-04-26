@@ -53,11 +53,11 @@ function PhotoEditScreen(props) {
   // const [isNew] = useState(!props.match.params || !props.match.params.id);
   // const { photoEntity, albums, tags, loading, updating } = props;
   // const { description, image, imageContentType } = photoEntity;
-  const { description, image, imageContentType } = photo;
+  // const { description, image, imageContentType } = photo;
   console.log('photo  : ', photo);
   console.log('isNewEntity : ', isNewEntity);
   console.log('formValue : ', formValue);
-  console.log('albumList : ', albumList);
+  // console.log('albumList : ', albumList);
   console.log('tagList : ', tagList);
   
 
@@ -72,13 +72,14 @@ function PhotoEditScreen(props) {
   React.useEffect(() => {
     //console.log("chk 얼마나 호출되는지")
     if (isNewEntity) {
-      reset();
+      // reset();
       setFormValue(entityToFormValue({}));
     } else if (!fetching) {
+      // console.log("9999999999999999")
       setFormValue(entityToFormValue(photo));
     }
-  }, [fetching]);
-  // }, [photo, fetching, isNewEntity]);
+  // }, [fetching]);
+  }, [photo, fetching, isNewEntity]);
 
   // fetch related entities
   React.useEffect(() => {
@@ -109,6 +110,10 @@ function PhotoEditScreen(props) {
     })();
   }, []);
 
+
+  const imageRef = createRef();
+
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -121,29 +126,38 @@ function PhotoEditScreen(props) {
       let rawData = ParseDataUri(result.uri);      
       // setImageMediaType(rawData.mimeType)
       // setImage(base64.encodeFromByteArray(rawData.data))
+      console.log("tags.map : ", formValue.tags.map((id) => id))
+      console.log("tags.length : ", formValue?.tags.length)
+
       setFormValue(entityToFormValue({
+        id: formValue?.id ?? null,
+        title: formValue?.title ?? null,
+        description: formValue?.description ?? null,
+        taken: formValue?.taken ?? null,
+        album: formValue?.album ?? null,
+        tags: formValue?.tags.length > 0 ? formValue.tags.map((id) => {return {id: id}}) : [],
         image : base64.encodeFromByteArray(rawData.data),
         imageContentType: rawData.mimeType
-      }));   
+      }));      
     }
   };
 
+  
   // const onSubmit = (data, imageChangedData, imageChangedMediatype) => updatePhoto(formValueToEntity(data, imageChangedData, imageChangedMediatype));
   // const onSubmit = (data) => updatePhoto(formValueToEntity(date));
-  const onSubmit = (data) => updatePhoto(formValueToEntity(
-    // entityToFormValue( console.log('data : ', data) ||  console.log('data.tags.map((i) => i) : ', data.tags.map((i) => i)) || {
-    entityToFormValue( console.log('data : ', data) || {
-      // id: formValue.id ?? null,
-      title: formValue.title ? formValue.title : data.title,
-      description: formValue.description ? formValue.description : data.description,
+    const onSubmit = (data) => updatePhoto(formValueToEntity(    
+    console.log('onSubmit data : ', data) || {
+      id: formValue?.id ?? null,
+      title: data.title ? data.title : formValue.title,
+      description: data.description ? data.description : formValue.description,
       image: formValue.image ? formValue.image : data.image,
       imageContentType: formValue.imageContentType ? formValue.imageContentType : data.imageContentType,
       taken: formValue.taken ? formValue.taken : data.taken,
-      album: formValue.album ? formValue.album : (data.album ? data.album : null),
-      tags: (formValue.tags !== undefined && formValue.tags !== null) ? formValue.tags.map((i) => i) : 
-        ((data.tags !== undefined && data.tags !== null) ? data.tags.map((i) => i) : [])
-    })));
-
+      album: data.album ? {id : data.album} : (formValue.album ? formValue.album : null),
+      tags: data.tags ? data.tags.map((tag) =>  {
+        return {id : tag}
+      }) : [],        
+    }));
 
   if (fetching) {
     return (
@@ -156,55 +170,54 @@ function PhotoEditScreen(props) {
   const formRef = createRef();
   const titleRef = createRef();
   const descriptionRef = createRef();
-  const imageRef = createRef();
+  
   const imageContentTypeRef = createRef();
   const takenRef = createRef();
   const albumRef = createRef();
   const tagsRef = createRef();
-/*
-  const itemsKcod = [
-    // this is the parent or 'item'
-    {
-      name: 'Fruits',
-      id: 0,
-      // these are the children or 'sub items'
-      children: [
-        {
-          name: 'Apple',
-          id: 10,
-        },
-        {
-          name: 'Strawberry',
-          id: 17,
-        },
-        {
-          name: 'Pineapple',
-          id: 13,
-        },
-        {
-          name: 'Banana',
-          id: 14,
-        },
-        {
-          name: 'Watermelon',
-          id: 15,
-        },
-        {
-          name: 'Kiwi fruit',
-          id: 16,
-        },
-      ],
-    },
 
-  ];
+  // const itemsKcod = [
+  //   // this is the parent or 'item'
+  //   {
+  //     name: 'Fruits',
+  //     id: 0,
+  //     // these are the children or 'sub items'
+  //     children: [
+  //       {
+  //         name: 'Apple',
+  //         id: 10,
+  //       },
+  //       {
+  //         name: 'Strawberry',
+  //         id: 17,
+  //       },
+  //       {
+  //         name: 'Pineapple',
+  //         id: 13,
+  //       },
+  //       {
+  //         name: 'Banana',
+  //         id: 14,
+  //       },
+  //       {
+  //         name: 'Watermelon',
+  //         id: 15,
+  //       },
+  //       {
+  //         name: 'Kiwi fruit',
+  //         id: 16,
+  //       },
+  //     ],
+  //   },
 
-  console.log('itemsKcod : ', itemsKcod)
-  const tmp = tagList.concat();
-  console.log("tmp : ", tmp)
-  console.log("Array.isArray(tmp) : ", Array.isArray(tmp))
-  var muTmp = SeamlessImmutable.asMutable(tmp);
-  console.log("muTmp : ", muTmp);
-*/
+  // ];
+
+  // console.log('itemsKcod : ', itemsKcod)
+  // const tmp = tagList.concat();
+  // console.log("tmp : ", tmp)
+  // console.log("Array.isArray(tmp) : ", Array.isArray(tmp))
+  // var muTmp = SeamlessImmutable.asMutable(tmp);
+  // console.log("muTmp : ", muTmp);
 
   return (
     <View style={styles.container}>
@@ -239,12 +252,10 @@ function PhotoEditScreen(props) {
             />
             {/* <Text>여기에 이미지 수정버튼 달기, Expo ImagePicker 바로 넣어 보기</Text> */}
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Button title="Pick an image from camera roll" onPress={pickImage} />
-              {!image && <Image source={{
-                uri:`data:${formValue.imageContentType};base64,${formValue.image}`}} 
-                style={{ width: 100, height: 100 }}/>}
-            </View>
-            {image && <FormField
+              <Button title="Pick an image from camera roll" onPress={pickImage} />              
+            </View> 
+
+           {!formValue.image ? <FormField
               name="image"
               ref={imageRef}
               label="Image"              
@@ -252,8 +263,11 @@ function PhotoEditScreen(props) {
               inputType="image-base64"
               contentType={photo.imageContentType}
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
-            />}       
-            {image && <FormField
+            /> : <Image source={{
+              uri:`data:${formValue.imageContentType};base64,${formValue.image}`}} 
+              style={{ width: 100, height: 100 }}/> }   
+
+            {formValue.imageContentType && <FormField
               name="imageContentType"
               ref={imageContentTypeRef}
               label="Image Content Type"
@@ -262,7 +276,9 @@ function PhotoEditScreen(props) {
               inputType="text"
               autoCapitalize="none"
               onSubmitEditing={() => takenRef.current?.focus()}
+              visable={false}
             />}
+            
             <FormField name="taken" ref={takenRef} label="Taken" placeholder="Enter Taken" testID="takenInput" inputType="datetime" />
             <FormField
               name="album"
@@ -278,7 +294,9 @@ function PhotoEditScreen(props) {
               name="tags"
               inputType="select-multiple"
               ref={tagsRef}
+              //listItems={{id:0, name:"Tag", children:{...tagList}}}
               listItems={tagList}
+              // listItems={itemsKcod[0].children}              
               listItemLabelField="name"
               label="Tag"
               placeholder="Select Tag"
@@ -294,34 +312,38 @@ function PhotoEditScreen(props) {
 
 // convenience methods for customizing the mapping of the entity to/from the form value
 const entityToFormValue = (value) => {
-  console.log("chk entityToFormValue() value : ", value)
+  console.log("chk entityToFormValue() value : ", value)  
   if (!value) {
     return {};
   }
-  return {
+  console.log("check tags.length : ", value.tags?.length)
+  const entity = {
     id: value.id ?? null,
     title: value.title ?? null,
     description: value.description ?? null,
     image: value.image ?? null,
     imageContentType: value.imageContentType ?? null,
     taken: value.taken ?? null,
-    album: value.album && value.album ? value.album : null,
+    album: value.album?.id ? value.album.id : value.album,
     // 임시로 간단히 처리하기 위해서 막아 놓음, 이미 값이 들어있는 tags 가 있으면 children  을 못 찾는 버그 발생
-    // tags: value.tags?.map((i) => i) ?? [],
+    tags: value.tags?.length > 0 ? value.tags.map((tag) => tag.id ) : value.tags,
+    // tags: []
   };
+  console.log('entityToFormValue return : ', entity);
+  return entity;
 };
 const formValueToEntity = (value) => {
   console.log("chk formValueToEntity() : ", value)
   const entity = {
-    id: value.id ?? null,
+    id: value?.id ?? null,
     title: value.title ?? null,
     description: value.description ?? null,
     image: value.image ?? null,    
     imageContentType: value.imageContentType ?? null,
     taken: value.taken ?? null,
   };  
-  entity.album = value.album ? { id: value.album } : null;
-  entity.tags = value.tags !== undefined ? value.tags.map((id) => ({ id })) : [];
+  entity.album = value.album ? value.album : null;
+  entity.tags = value.tags !== undefined ? value.tags.map((id) => id) : [];
   console.log("chk return entity : ", entity)
   return entity;
 };

@@ -137,6 +137,7 @@ export const allFailure = (state, action) => {
 // Something went wrong updating.
 export const updateFailure = (state, action) => {
   const { error } = action;
+  console.log("chk updateFailure() ", action, state)
   return state.merge({
     updateSuccess: false,
     updating: false,

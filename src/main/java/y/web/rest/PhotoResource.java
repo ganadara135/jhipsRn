@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.hibernate.mapping.Any;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,8 +78,9 @@ public class PhotoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/photos/{id}")
-    public ResponseEntity<Photo> updatePhoto(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Photo photo)
+    public ResponseEntity<Photo> updatePhoto(@PathVariable(value = "id", required = false) final Long id, @RequestBody Photo photo)
         throws URISyntaxException {
+        System.out.print("777777777777777777777 : " + photo);
         log.debug("REST request to update Photo : {}, {}", id, photo);
         if (photo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

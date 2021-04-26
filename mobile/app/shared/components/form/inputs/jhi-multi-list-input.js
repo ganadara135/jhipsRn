@@ -9,6 +9,7 @@ export default React.forwardRef((props, ref) => {
   const actualPlaceholder = placeholder ? placeholder : 'Select an item...';
 
   const memoizedItems = React.useMemo(() => {
+    console.log("check listItems : ", listItems);
     // map the list items to the expected Picker format
     const mapListItems = () => {
       const children = listItems.map((listItem) => {
@@ -37,6 +38,7 @@ export default React.forwardRef((props, ref) => {
 
   // console.log("chk props : ", props)
   console.log("chk memoizedItems : ", memoizedItems)
+  // console.log("chk ...memoizedItems : ", ...memoizedItems)
   // console.log("chk subKey : ", memoizedItems[0]['children'].length)
 
   return (
