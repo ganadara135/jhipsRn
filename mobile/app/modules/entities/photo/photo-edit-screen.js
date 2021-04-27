@@ -265,7 +265,7 @@ function PhotoEditScreen(props) {
               onSubmitEditing={() => imageContentTypeRef.current?.focus()}
             /> : <Image source={{
               uri:`data:${formValue.imageContentType};base64,${formValue.image}`}} 
-              style={{ width: 100, height: 100 }}/> }   
+              style={{ width: 200, height: 200 }}/> }   
 
             {formValue.imageContentType && <FormField
               name="imageContentType"

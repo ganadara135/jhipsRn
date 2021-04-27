@@ -78,9 +78,9 @@ public class PhotoResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/photos/{id}")
-    public ResponseEntity<Photo> updatePhoto(@PathVariable(value = "id", required = false) final Long id, @RequestBody Photo photo)
+    public ResponseEntity<Photo> updatePhoto(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Photo photo)
         throws URISyntaxException {
-        System.out.print("777777777777777777777 : " + photo);
+        // System.out.print("777777777777777777777 : " + photo);
         log.debug("REST request to update Photo : {}, {}", id, photo);
         if (photo.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -172,6 +172,8 @@ public class PhotoResource {
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get a page of Photos");
+        System.out.println("Pageable : " + pageable);
+
         Page<Photo> page;
         // if (eagerload) {
         //     page = photoRepository.findAllWithEagerRelationships(pageable);
