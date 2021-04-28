@@ -2,9 +2,6 @@ package y.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -163,16 +160,8 @@ public class AlbumResource {
     @GetMapping("/albums")
     public ResponseEntity<List<Album>> getAllAlbums(Pageable pageable) {
         log.debug("REST request to get a page of Albums");
-        System.out.println("Pageable : " + pageable);
-        // Page<Album> page = albumRepository.findAll(pageable);
-        // albumRepository.findAllById(ids)
-        // List<Long> list = new ArrayList<>();
-        // list.add(2L);
-        // List<Long> ids = Arrays.asList(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort(), pageable.toOptional(), 2L,6L);
-        // Page<Album> page = (Page<Album>) albumRepository.findAllByIdMy(pageable, 2L);
-        Page<Album> page = albumRepository.findAllByIdMy(pageable);
+        Page<Album> page = albumRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        System.out.println("page : " + page.getContent());
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

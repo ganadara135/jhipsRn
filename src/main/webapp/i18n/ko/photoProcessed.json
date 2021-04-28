@@ -1,0 +1,27 @@
+{
+  "orgApp": {
+    "photoProcessed": {
+      "home": {
+        "title": "Photo Processeds",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Photo Processed",
+        "createOrEditLabel": "Create or edit a Photo Processed",
+        "notFound": "No Photo Processeds found"
+      },
+      "created": "A new Photo Processed is created with identifier {{ param }}",
+      "updated": "A Photo Processed is updated with identifier {{ param }}",
+      "deleted": "A Photo Processed is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Photo Processed {{ id }}?"
+      },
+      "detail": {
+        "title": "Photo Processed"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "created": "Created",
+      "photo": "Photo"
+    }
+  }
+}

@@ -7,6 +7,7 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Album from './album';
 import Photo from './photo';
 import Tag from './tag';
+import PhotoProcessed from './photo-processed';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -16,6 +17,7 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}album`} component={Album} />
       <ErrorBoundaryRoute path={`${match.url}photo`} component={Photo} />
       <ErrorBoundaryRoute path={`${match.url}tag`} component={Tag} />
+      <ErrorBoundaryRoute path={`${match.url}photo-processed`} component={PhotoProcessed} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>

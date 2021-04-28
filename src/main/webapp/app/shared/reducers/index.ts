@@ -24,6 +24,10 @@ import photo, {
 import tag, {
   TagState
 } from 'app/entities/tag/tag.reducer';
+// prettier-ignore
+import photoProcessed, {
+  PhotoProcessedState
+} from 'app/entities/photo-processed/photo-processed.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -40,6 +44,7 @@ export interface IRootState {
   readonly album: AlbumState;
   readonly photo: PhotoState;
   readonly tag: TagState;
+  readonly photoProcessed: PhotoProcessedState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -58,6 +63,7 @@ const rootReducer = combineReducers<IRootState>({
   album,
   photo,
   tag,
+  photoProcessed,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

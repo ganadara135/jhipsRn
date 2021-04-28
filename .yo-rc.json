@@ -42,7 +42,7 @@
     "clientThemeVariant": "",
     "languages": ["ko", "en"],
     "otherModules": [],
-    "entities": ["Album", "Photo", "Tag"],
-    "lastLiquibaseTimestamp": 1618134044000
+    "entities": ["Album", "Photo", "Tag", "PhotoProcessed"],
+    "lastLiquibaseTimestamp": 1619596846000
   }
 }

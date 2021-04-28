@@ -1,0 +1,33 @@
+{
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "created",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "photo",
+      "otherEntityName": "photo",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "",
+      "ownerSide": true,
+      "id": true,
+      "otherEntityRelationshipName": "photoProcessed"
+    }
+  ],
+  "service": "no",
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "PhotoProcessed",
+  "changelogDate": "20210428080046"
+}
