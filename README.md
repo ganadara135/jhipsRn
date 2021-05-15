@@ -1,8 +1,12 @@
+# installation Issues
+
+1. sudo chown -R `whoami` ~/.npm
+
 # How to operate this
 
 1. wsl port forwarding
 2. db and redis up on docker by 'npm run docker:db:up' and 'npm run docker:redis:up'
-3. backend up by 'npm run backend:start' on root authority
+3. backend up by 'npm run backend:start' ( on root authority or "sudo chown -R $whoami ~/.npm)
 4. 'npm start' for webapps with Browsersync. This is going to operate on WDS(Webpack Dev Server)
 5. go to mobile directory and start react native app,'npm run start3'='EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0 REACT_NATIVE_PACKAGER_HOSTNAME=192.168.0.13 expo start'
 6. change url on browser from 0.0.0.0:19002 to hostIP:19002
